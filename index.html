@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Grid</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="controls">
+        <label for="rowRange">Rows:</label>
+        <input type="range" id="rowRange" min="1" max="100" value="16">
+        <span id="rowOutput">16</span>
+
+        <label for="colRange">Columns:</label>
+        <input type="range" id="colRange" min="1" max="100" value="16">
+        <span id="colOutput">16</span>
+
+        <input type="color" id="color" value="#ff0000">
+        <label for="random">
+            <input type="checkbox" id="random"> Random Colors
+        </label>
+        <button class="btn">Reset Grid</button>
+    </div>
+
+    <div id="container" class="grid-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
