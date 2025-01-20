@@ -7,6 +7,7 @@ const colOutput = document.getElementById("colOutput");
 const colorPicker = document.getElementById("color");
 const isRandom = document.getElementById("random");
 const resetButton = document.querySelector(".btn");
+const hoverModeToggle = document.getElementById("hoverMode");
 
 // Update the number display for sliders
 rowSlider.addEventListener("input", () => {
@@ -18,6 +19,11 @@ colSlider.addEventListener("input", () => {
     createGrid(rowSlider.value, colSlider.value);
 });
 
+// Add event listener for hover mode toggle
+hoverModeToggle.addEventListener("change", () => {
+    createGrid(rowSlider.value, colSlider.value);
+});
+
 // Function to generate a random color
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
@@ -26,6 +32,11 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+
+// Function to handle cell coloring
+function colorCell(cell) {
+    cell.style.backgroundColor = isRandom.checked ? getRandomColor() : colorPicker.value;
 }
 
 // Function to create the grid
@@ -44,15 +55,49 @@ function createGrid(rows, cols) {
         cell.classList.add("colDiv");
         container.appendChild(cell);
 
-        // Add hover effect for coloring
-        cell.addEventListener("mouseenter", () => {
-            cell.style.backgroundColor = isRandom.checked ? getRandomColor() : colorPicker.value;
+        if (hoverModeToggle.checked) {
+            // Hover mode: color on mouseover
+            cell.addEventListener("mouseover", () => colorCell(cell));
+        } else {
+            // Click mode: only color when mouse is down
+            let isDrawing = false;
+
+            cell.addEventListener("mousedown", (e) => {
+                e.preventDefault();
+                isDrawing = true;
+                colorCell(cell);
+            });
+
+            cell.addEventListener("mouseover", () => {
+                if (isDrawing) {
+                    colorCell(cell);
+                }
+            });
+        }
+
+        // Add touch events for mobile responsiveness
+        cell.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            colorCell(cell);
         });
-        cell.addEventListener("touchstart", () => {
-            cell.style.backgroundColor = isRandom.checked ? getRandomColor() : colorPicker.value;
+
+        cell.addEventListener("touchmove", (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const cellsUnderTouch = document.elementsFromPoint(touch.clientX, touch.clientY);
+            cellsUnderTouch.forEach(element => {
+                if (element.classList.contains('colDiv')) {
+                    colorCell(element);
+                }
+            });
         });
     }
 }
+
+// Add mouseup event listener to window for click mode
+window.addEventListener("mouseup", () => {
+    isDrawing = false;
+});
 
 // Reset the grid with default values
 resetButton.addEventListener("click", () => {
@@ -62,6 +107,7 @@ resetButton.addEventListener("click", () => {
     colOutput.textContent = 16;
     colorPicker.value = "#ff0000";
     isRandom.checked = false;
+    hoverModeToggle.checked = true;
     createGrid(16, 16);
 });
 
