@@ -3,30 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Grid</title>
+    <title>Enhanced Drawing Grid</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="controls">
-        <label for="rowRange">Rows:</label>
-        <input type="range" id="rowRange" min="1" max="100" value="16">
-        <span id="rowOutput">16</span>
+        <div class="control-group">
+            <label for="rowRange">Rows:</label>
+            <input type="range" id="rowRange" min="1" max="100" value="16">
+            <span id="rowOutput">16</span>
 
-        <label for="colRange">Columns:</label>
-        <input type="range" id="colRange" min="1" max="100" value="16">
-        <span id="colOutput">16</span>
+            <label for="colRange">Columns:</label>
+            <input type="range" id="colRange" min="1" max="100" value="16">
+            <span id="colOutput">16</span>
+        </div>
 
-        <input type="color" id="color" value="#ff0000">
+        <div class="control-group">
+            <input type="color" id="color" value="#ff0000">
 
-        <label for="random">
-            <input type="checkbox" id="random"> Random Colors
-        </label>
+            <div class="mode-toggles">
+                <label>
+                    <input type="radio" name="drawMode" value="normal" checked> Normal
+                </label>
+                <label>
+                    <input type="radio" name="drawMode" value="rainbow"> Rainbow
+                </label>
+                <label>
+                    <input type="radio" name="drawMode" value="eraser"> Eraser
+                </label>
+            </div>
 
-        <!-- New Toggle for Hover Mode -->
-        <label for="hoverMode">Enable Hover Mode:</label>
-        <input type="checkbox" id="hoverMode" checked>
+            <label for="brushSize">Brush Size:</label>
+            <input type="range" id="brushSize" min="1" max="5" value="1">
+            <span id="brushOutput">1</span>
+        </div>
 
-        <button class="btn">Reset Grid</button>
+        <div class="control-group">
+            <label>
+                <input type="checkbox" id="gridLines" checked> Show Grid
+            </label>
+            <label>
+                <input type="checkbox" id="hoverMode" checked> Hover Mode
+            </label>
+        </div>
+
+        <button class="btn reset">Reset Grid</button>
+        <button class="btn clear">Clear Grid</button>
     </div>
 
     <div id="container" class="grid-container"></div>
