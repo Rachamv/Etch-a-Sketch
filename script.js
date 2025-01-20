@@ -1,38 +1,24 @@
-// Function to create a grid dynamically
-function createGrid(size) {
-    const container = document.querySelector(".container");
-    container.innerHTML = ""; // Clear the container
+// DOM Elements
+const container = document.getElementById("container");
+const rowSlider = document.getElementById("rowRange");
+const colSlider = document.getElementById("colRange");
+const rowOutput = document.getElementById("rowOutput");
+const colOutput = document.getElementById("colOutput");
+const colorPicker = document.getElementById("color");
+const isRandom = document.getElementById("random");
+const resetButton = document.querySelector(".btn");
 
-    for (let i = 0; i < size; i++) {
-        const row = document.createElement("div");
-        row.classList.add("row");
-        row.style.display = "flex";
+// Update the number display for sliders
+rowSlider.addEventListener("input", () => {
+    rowOutput.textContent = rowSlider.value;
+    createGrid(rowSlider.value, colSlider.value);
+});
+colSlider.addEventListener("input", () => {
+    colOutput.textContent = colSlider.value;
+    createGrid(rowSlider.value, colSlider.value);
+});
 
-        for (let j = 0; j < size; j++) {
-            const cell = document.createElement("div");
-            cell.classList.add("cell");
-            cell.style.flex = "1";
-            cell.style.border = "1px solid black";
-            cell.style.backgroundColor = "white";
-            row.appendChild(cell);
-        }
-
-        container.appendChild(row);
-    }
-}
-
-// Function to apply hover effect on grid cells
-function applyHoverEffect() {
-    const cells = document.querySelectorAll(".cell");
-
-    cells.forEach(cell => {
-        cell.addEventListener("mouseover", () => {
-            cell.style.backgroundColor = "black";
-        });
-    });
-}
-
-// Function to get a random color
+// Function to generate a random color
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -42,30 +28,42 @@ function getRandomColor() {
     return color;
 }
 
-// Function to apply random color effect
-function applyRandomColorEffect() {
-    const cells = document.querySelectorAll(".cell");
+// Function to create the grid
+function createGrid(rows, cols) {
+    // Clear the container
+    container.innerHTML = "";
 
-    cells.forEach(cell => {
-        cell.addEventListener("mouseover", () => {
-            cell.style.backgroundColor = getRandomColor();
+    // Set the container's CSS grid properties
+    container.style.display = "grid";
+    container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+    // Create grid cells
+    for (let i = 0; i < rows * cols; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("colDiv");
+        container.appendChild(cell);
+
+        // Add hover effect for coloring
+        cell.addEventListener("mouseenter", () => {
+            cell.style.backgroundColor = isRandom.checked ? getRandomColor() : colorPicker.value;
         });
-    });
+        cell.addEventListener("touchstart", () => {
+            cell.style.backgroundColor = isRandom.checked ? getRandomColor() : colorPicker.value;
+        });
+    }
 }
 
-// Event listener for resizing the grid
-const resizeButton = document.querySelector("#resize");
-resizeButton.addEventListener("click", () => {
-    let gridSize = parseInt(prompt("Enter grid size (between 2 and 100):"));
-
-    if (gridSize >= 2 && gridSize <= 100) {
-        createGrid(gridSize);
-        applyHoverEffect();
-    } else {
-        alert("Please enter a valid number between 2 and 100.");
-    }
+// Reset the grid with default values
+resetButton.addEventListener("click", () => {
+    rowSlider.value = 16;
+    colSlider.value = 16;
+    rowOutput.textContent = 16;
+    colOutput.textContent = 16;
+    colorPicker.value = "#ff0000";
+    isRandom.checked = false;
+    createGrid(16, 16);
 });
 
-// Initial grid setup
-createGrid(16);
-applyHoverEffect();
+// Initialize the grid
+createGrid(16, 16);
